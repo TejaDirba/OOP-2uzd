@@ -1,27 +1,27 @@
 #include <iostream>
+#include <fstream>
 #include <vector>
+#include <sstream>
 #include <iomanip>
 #include <algorithm>
 #include <numeric>
-#include <string>
 
-// Structure to hold student data
 struct Student {
     std::string vardas;
     std::string pavarde;
-    std::vector<int> nd;  // Homeworks using a vector
+    std::vector<int> nd;
     int egzaminas;
     double galutinisVid;
     double galutinisMed;
 };
 
-// Function to calculate the average
+// Function to calculate the average of homework grades
 double calculateAverage(const std::vector<int>& nd) {
     if (nd.empty()) return 0;
     return std::accumulate(nd.begin(), nd.end(), 0.0) / nd.size();
 }
 
-// Function to calculate the median
+// Function to calculate the median of homework grades
 double calculateMedian(std::vector<int> nd) {
     if (nd.empty()) return 0;
     std::sort(nd.begin(), nd.end());
@@ -32,16 +32,118 @@ double calculateMedian(std::vector<int> nd) {
         return nd[size / 2];
 }
 
-// Function to read student data from **user input** dynamically
-void inputStudents(std::vector<Student>& students) {
-    int studentCount;
-    std::cout << "Enter the number of students: ";
-    std::cin >> studentCount;
+// Function to read student data from a file
+std::vector<Student> readStudentsFromFile(const std::string& filename) {
+    std::vector<Student> students;
+    std::ifstream file(filename);
+    
+    if (!file) {
+        std::cerr << "Error opening file: " << filename << std::endl;
+        return students;
+    }
 
-    for (int i = 0; i < studentCount; i++) {
+    std::string line;
+    std::getline(file, line);  // Skipping the header
+
+    while (std::getline(file, line)) {
+        std::stringstream ss(line);
         Student student;
-        std::cout << "Enter student's first name and last name: ";
-        std::cin >> student.vardas >> student.pavarde;
+        
+        ss >> student.vardas >> student.pavarde;
+        int grade;
+        while (ss >> grade) {
+            student.nd.push_back(grade);
+        }
 
-        std::vector<int> homeworkScores;
-        int
+        if (!student.nd.empty()) {
+            student.egzaminas = student.nd.back();
+            student.nd.pop_back();  // Remove the last element used as the exam score
+        }
+
+        student.galutinisVid = 0.4 * calculateAverage(student.nd) + 0.6 * student.egzaminas;
+        student.galutinisMed = 0.4 * calculateMedian(student.nd) + 0.6 * student.egzaminas;
+
+        students.push_back(student);
+    }
+
+    return students;
+}
+
+// Function to print student details
+void printResults(const std::vector<Student>& students) {
+    std::cout << std::left << std::setw(15) << "Pavarde" 
+              << std::setw(15) << "Vardas" 
+              << std::setw(15) << "Galutinis (Vid.)"
+              << std::setw(15) << "Galutinis (Med.)"
+              << "\n-----------------------------------------------------------\n";
+
+    for (const auto& student : students) {
+        std::cout << std::left << std::setw(15) << student.pavarde
+                  << std::setw(15) << student.vardas
+                  << std::setw(15) << std::fixed << std::setprecision(2) << student.galutinisVid
+                  << std::setw(15) << std::fixed << std::setprecision(2) << student.galutinisMed
+                  << std::endl;
+    }
+}
+
+// Sorting comparators
+bool compareByName(const Student& a, const Student& b) {
+    return a.vardas < b.vardas;
+}
+
+bool compareByAvg(const Student& a, const Student& b) {
+    return a.galutinisVid > b.galutinisVid;
+}
+
+bool compareByMedian(const Student& a, const Student& b) {
+    return a.galutinisMed > b.galutinisMed;
+}
+
+int main() {
+    std::string filename;
+    std::cout << "Enter the file name (e.g., Studentai10000.txt): ";
+    std::cin >> filename;
+
+    std::vector<Student> students = readStudentsFromFile(filename);
+
+    if (students.empty()) {
+        std::cerr << "No student data found!" << std::endl;
+        return 1;
+    }
+
+    int sortOption;
+    std::cout << "Choose sorting method (1 - by name, 2 - by final grade average, 3 - by final grade median): ";
+    std::cin >> sortOption;
+
+    if (sortOption == 1) {
+        std::sort(students.begin(), students.end(), compareByName);
+    } else if (sortOption == 2) {
+        std::sort(students.begin(), students.end(), compareByAvg);
+    } else if (sortOption == 3) {
+        std::sort(students.begin(), students.end(), compareByMedian);
+    }
+
+    // Save the formatted output to a file
+    std::ofstream outputFile("results.txt");
+    if (outputFile) {
+        outputFile << std::left << std::setw(15) << "Pavarde" 
+                   << std::setw(15) << "Vardas" 
+                   << std::setw(15) << "Galutinis (Vid.)"
+                   << std::setw(15) << "Galutinis (Med.)"
+                   << "\n-----------------------------------------------------------\n";
+
+        for (const auto& student : students) {
+            outputFile << std::left << std::setw(15) << student.pavarde
+                       << std::setw(15) << student.vardas
+                       << std::setw(15) << std::fixed << std::setprecision(2) << student.galutinisVid
+                       << std::setw(15) << std::fixed << std::setprecision(2) << student.galutinisMed
+                       << std::endl;
+        }
+        outputFile.close();
+        std::cout << "Results saved to: results.txt" << std::endl;
+    } else {
+        std::cerr << "Error writing results to file!" << std::endl;
+    }
+
+    return 0;
+}
