@@ -11,4 +11,4 @@ bool compareByName(const Stud& a, const Stud& b);
 bool compareByAvg(const Stud& a, const Stud& b);
 bool compareByMedian(const Stud& a, const Stud& b);
 
-#endif // UTILS_H
+#endif 
