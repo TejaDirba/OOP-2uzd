@@ -13,4 +13,4 @@ using std::string;
 
 vector<Stud> readStudentsFromFile(const string& filename);
 
-#endif // FILE_OPERATIONS_H
+#endif
