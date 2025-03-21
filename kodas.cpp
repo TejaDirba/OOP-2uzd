@@ -3,12 +3,16 @@
 #include "generator.h"
 #include "utils.h"
 #include <iostream>
-#include <iomanip>
-#include <vector>
-#include <string>
-#include <chrono>
-#include <algorithm>
 #include <fstream>
+#include <vector>
+#include <list>
+#include <deque>
+#include <string>
+#include <algorithm>
+#include <chrono>
+#include <iomanip>
+#include <numeric>
+#include <random> 
 
 using std::cout;
 using std::cin;
@@ -19,7 +23,7 @@ using std::setprecision;
 using std::vector;
 using std::string;
 using std::ofstream;
-using namespace chrono;
+using namespace std::chrono;
 
 void printResults(const vector<Stud>& students) {
     cout << setw(15) << "Pavarde" 
