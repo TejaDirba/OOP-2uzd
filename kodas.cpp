@@ -35,13 +35,81 @@ double calculateMedian(std::vector<int> nd) {
 // Function to read student data from **user input** dynamically
 void inputStudents(std::vector<Student>& students) {
     int studentCount;
-    std::cout << "Enter the number of students: ";
+    std::cout << “Enter the number of students: ”;
     std::cin >> studentCount;
 
     for (int i = 0; i < studentCount; i++) {
         Student student;
-        std::cout << "Enter student's first name and last name: ";
+        std::cout << “Enter student‘s first name and last name: ”;
         std::cin >> student.vardas >> student.pavarde;
 
         std::vector<int> homeworkScores;
-        int
+        int homework;
+        std::cout << “Enter homework grades (-1 to finish): ”;
+        while (true) {
+            std::cin >> homework;
+            if (homework == -1) break;
+            homeworkScores.push_back(homework);
+        }
+
+        std::cout << “Enter exam grade: ”;
+        std::cin >> student.egzaminas;
+
+        student.nd = homeworkScores;
+        student.galutinisVid = 0.4 * calculateAverage(student.nd) + 0.6 * student.egzaminas;
+        student.galutinisMed = 0.4 * calculateMedian(student.nd) + 0.6 * student.egzaminas;
+
+        students.push_back(student);
+    }
+}
+
+// Function to print results
+void printResults(const std::vector<Student>& students) {
+    std::cout << std::left << std::setw(15) << “Pavarde” 
+              << std::setw(15) << “Vardas” 
+              << std::setw(15) << “Galutinis (Vid.)”
+              << std::setw(15) << “Galutinis (Med.)”
+              << “\n-----------------------------------------------------------\n”;
+
+    for (const auto& student : students) {
+        std::cout << std::left << std::setw(15) << student.pavarde
+                  << std::setw(15) << student.vardas
+                  << std::setw(15) << std::fixed << std::setprecision(2) << student.galutinisVid
+                  << std::setw(15) << std::fixed << std::setprecision(2) << student.galutinisMed
+                  << std::endl;
+    }
+}
+
+// Comparator for sorting
+bool compareByName(const Student& a, const Student& b) {
+    return a.vardas < b.vardas;
+}
+
+int main() {
+    std::vector<Student> students;
+    inputStudents(students);
+
+    if (students.empty()) {
+        std::cerr << “No student data entered!” << std::endl;
+        return 1;
+    }
+
+    int sortOption;
+    std::cout << “Choose sorting method (1 - by name, 2 - by final grade average, 3 - by final grade median): ”;
+    std::cin >> sortOption;
+
+    if (sortOption == 1) {
+        std::sort(students.begin(), students.end(), compareByName);
+    } else if (sortOption == 2) {
+        std::sort(students.begin(), students.end(), [](const Student& a, const Student& b) {
+            return a.galutinisVid > b.galutinisVid;
+        });
+    } else if (sortOption == 3) {
+        std::sort(students.begin(), students.end(), [](const Student& a, const Student& b) {
+            return a.galutinisMed > b.galutinisMed;
+        });
+    }
+
+    printResults(students);
+    return 0;
+}
