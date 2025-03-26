@@ -5,23 +5,20 @@
 #include <numeric>
 #include <string>
 
-// Structure to hold student data
 struct Student {
     std::string vardas;
     std::string pavarde;
-    std::vector<int> nd;  // Homeworks using a vector
+    std::vector<int> nd;
     int egzaminas;
     double galutinisVid;
     double galutinisMed;
 };
 
-// Function to calculate the average
 double calculateAverage(const std::vector<int>& nd) {
     if (nd.empty()) return 0;
     return std::accumulate(nd.begin(), nd.end(), 0.0) / nd.size();
 }
 
-// Function to calculate the median
 double calculateMedian(std::vector<int> nd) {
     if (nd.empty()) return 0;
     std::sort(nd.begin(), nd.end());
@@ -32,27 +29,27 @@ double calculateMedian(std::vector<int> nd) {
         return nd[size / 2];
 }
 
-// Function to read student data from **user input** dynamically
+// Fdinaminis input perskaitymas
 void inputStudents(std::vector<Student>& students) {
     int studentCount;
-    std::cout << “Enter the number of students: ”;
+    std::cout << "Įveskite studentų skaičių: ";
     std::cin >> studentCount;
 
     for (int i = 0; i < studentCount; i++) {
         Student student;
-        std::cout << “Enter student‘s first name and last name: ”;
+        std::cout << "Vardas ir pavardė: ";
         std::cin >> student.vardas >> student.pavarde;
 
         std::vector<int> homeworkScores;
         int homework;
-        std::cout << “Enter homework grades (-1 to finish): ”;
+        std::cout << "Suveskite namų darbų pažymius (-1 to finish): ";
         while (true) {
             std::cin >> homework;
             if (homework == -1) break;
             homeworkScores.push_back(homework);
         }
 
-        std::cout << “Enter exam grade: ”;
+        std::cout << "Suveskite egzamino pažymį: ";
         std::cin >> student.egzaminas;
 
         student.nd = homeworkScores;
@@ -63,13 +60,12 @@ void inputStudents(std::vector<Student>& students) {
     }
 }
 
-// Function to print results
 void printResults(const std::vector<Student>& students) {
-    std::cout << std::left << std::setw(15) << “Pavarde” 
-              << std::setw(15) << “Vardas” 
-              << std::setw(15) << “Galutinis (Vid.)”
-              << std::setw(15) << “Galutinis (Med.)”
-              << “\n-----------------------------------------------------------\n”;
+    std::cout << std::left << std::setw(15) << "Pavarde" 
+              << std::setw(15) << "Vardas" 
+              << std::setw(15) << "Galutinis (Vid.)"
+              << std::setw(15) << "Galutinis (Med.)"
+              << "\n-----------------------------------------------------------\n";
 
     for (const auto& student : students) {
         std::cout << std::left << std::setw(15) << student.pavarde
@@ -90,12 +86,12 @@ int main() {
     inputStudents(students);
 
     if (students.empty()) {
-        std::cerr << “No student data entered!” << std::endl;
+        std::cerr << "Nesuvesti studento duomenys!" << std::endl;
         return 1;
     }
 
     int sortOption;
-    std::cout << “Choose sorting method (1 - by name, 2 - by final grade average, 3 - by final grade median): ”;
+    std::cout << "Pasirinkite pagal ką norite rušiuoti (1 - Vardu, 2 - Vidurkiu, 3 - Mediana): ";
     std::cin >> sortOption;
 
     if (sortOption == 1) {
@@ -113,3 +109,4 @@ int main() {
     printResults(students);
     return 0;
 }
+
