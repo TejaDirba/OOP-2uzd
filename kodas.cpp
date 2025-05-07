@@ -15,13 +15,13 @@ struct Student {
     double galutinisMed;
 };
 
-// Function to calculate the average of homework grades
+
 double calculateAverage(const std::vector<int>& nd) {
     if (nd.empty()) return 0;
     return std::accumulate(nd.begin(), nd.end(), 0.0) / nd.size();
 }
 
-// Function to calculate the median of homework grades
+
 double calculateMedian(std::vector<int> nd) {
     if (nd.empty()) return 0;
     std::sort(nd.begin(), nd.end());
@@ -32,7 +32,6 @@ double calculateMedian(std::vector<int> nd) {
         return nd[size / 2];
 }
 
-// Function to read student data from a file
 std::vector<Student> readStudentsFromFile(const std::string& filename) {
     std::vector<Student> students;
     std::ifstream file(filename);
@@ -43,7 +42,7 @@ std::vector<Student> readStudentsFromFile(const std::string& filename) {
     }
 
     std::string line;
-    std::getline(file, line);  // Skipping the header
+    std::getline(file, line);  // skipping the header
 
     while (std::getline(file, line)) {
         std::stringstream ss(line);
@@ -57,7 +56,7 @@ std::vector<Student> readStudentsFromFile(const std::string& filename) {
 
         if (!student.nd.empty()) {
             student.egzaminas = student.nd.back();
-            student.nd.pop_back();  // Remove the last element used as the exam score
+            student.nd.pop_back();  // remove the last element used as the exam score
         }
 
         student.galutinisVid = 0.4 * calculateAverage(student.nd) + 0.6 * student.egzaminas;
@@ -69,7 +68,7 @@ std::vector<Student> readStudentsFromFile(const std::string& filename) {
     return students;
 }
 
-// Function to print student details
+
 void printResults(const std::vector<Student>& students) {
     std::cout << std::left << std::setw(15) << "Pavarde" 
               << std::setw(15) << "Vardas" 
@@ -86,7 +85,7 @@ void printResults(const std::vector<Student>& students) {
     }
 }
 
-// Sorting comparators
+
 bool compareByName(const Student& a, const Student& b) {
     return a.vardas < b.vardas;
 }
