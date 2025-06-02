@@ -111,7 +111,7 @@ int main() {
     }
 
     int sortOption;
-    std::cout << "Choose sorting method (1 - by name, 2 - by final grade average, 3 - by final grade median): ";
+    std::cout << "Pasirinkite rūšiavimą (1-Vardas, 2-Vidurkis, 3-Mediana): ";
     std::cin >> sortOption;
 
     if (sortOption == 1) {
@@ -122,7 +122,6 @@ int main() {
         std::sort(students.begin(), students.end(), compareByMedian);
     }
 
-    // Save the formatted output to a file
     std::ofstream outputFile("results.txt");
     if (outputFile) {
         outputFile << std::left << std::setw(15) << "Pavarde" 
