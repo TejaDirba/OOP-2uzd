@@ -11,7 +11,7 @@ using namespace std;
 using Clock = chrono::high_resolution_clock;
 
 void printMainMenu(){
-    cout<<"\n=== STUDENTU PAZYMIU SISTEMA v1.1 ===\n"
+    cout<<"\n=== STUDENTU PAZYMIU SISTEMA ===\n"
           "1) Interactive mode\n"
           "2) Batch mode\n"
           "3) Generate test files\n"
