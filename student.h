@@ -15,13 +15,11 @@ private:
 public:
     Student();
     Student(const std::string& v, const std::string& p);
-
-    // Rule of Five
     Student(const Student& other);
     Student(Student&& other) noexcept;
     Student& operator=(const Student& other);
     Student& operator=(Student&& other) noexcept;
-    ~Student();
+    ~Student() override;
 
     std::vector<int> getNd() const;
     int getEgzaminas() const;
@@ -37,4 +35,8 @@ public:
     friend std::ostream& operator<<(std::ostream& os, const Student& s);
 };
 
-#endif // STUDENT_H
+bool compareByName(const Student& a, const Student& b);
+bool compareByAvg(const Student& a, const Student& b);
+bool compareByMedian(const Student& a, const Student& b);
+
+#endif
