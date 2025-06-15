@@ -1,0 +1,6 @@
+PROJECT_NAME           = "StudentSystem v2.0"
+OUTPUT_DIRECTORY       = html latex
+GENERATE_LATEX         = YES
+GENERATE_HTML          = YES
+INPUT                  = ../src
+RECURSIVE              = YES
